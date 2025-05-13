@@ -1,13 +1,15 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from './components/LoginPage';
+import { useAuth } from "./context/AuthContext";
+import AuthPage from "./pages/AuthPage";
+
 function App() {
-  return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="*" element={<Navigate to="/login" />} />
-    </Routes>
-  );
+
+  const { isLoading, isAuthenticated } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  return isAuthenticated ? <DashboardPage /> : <AuthPage />;
 }
 
 export default App;
