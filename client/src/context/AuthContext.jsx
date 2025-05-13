@@ -1,5 +1,5 @@
 // src/context/AuthContext.jsx
-import React, { createContext, useContext, useState, useEffect, Children } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
@@ -7,7 +7,7 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-export const AuthProvider = ({ Children }) => {
+export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -52,7 +52,7 @@ export const AuthProvider = ({ Children }) => {
       password,
       gender,
     };
-    setUsers([...users, newUser]);
+    setUsers(prevUsers => [...prevUsers, newUser]);
     setCurrentUser(newUser);
     setIsAuthenticated(true);
     alert('Signup successful!');
@@ -67,7 +67,7 @@ export const AuthProvider = ({ Children }) => {
       return true;
     }
     alert('Invalid username or password. Please try again.');
-    isAuthenticated(false);
+    setIsAuthenticated(false);
     setCurrentUser(null);
     return false;
 
@@ -81,6 +81,8 @@ export const AuthProvider = ({ Children }) => {
   const value = {
     currentUser,
     isAuthenticated,
+    isLoading,
+    users,
     signup,
     login,
     logout,
@@ -89,5 +91,5 @@ export const AuthProvider = ({ Children }) => {
   if (isLoading) {
     return <div>Loading...</div>
   }
-  return <AuthContext.Provider value={value}>{Children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import LoginPage from '../components/LoginPage';
-import SignupPage from '../components/SignupPage';
+import SignupPage from '../components/SignUpPage';
 
 const AuthPage = () => {
     const [showLogin, setShowLogin] = useState(true);
