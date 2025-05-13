@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const LoginPage = ({ onSwitchToSignup }) => {
@@ -17,10 +16,11 @@ const LoginPage = ({ onSwitchToSignup }) => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        login(formData.username, formData.password);
-
+        setIsLoading(true);
+        await login(formData.username, formData.password);
+        setIsLoading(false);
     }
 
     return (
@@ -29,18 +29,19 @@ const LoginPage = ({ onSwitchToSignup }) => {
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="login-username">Username:</label>
-                    <input type='text' id='login-username' name='username' onChange={handleChange} required />
+                    <input type='text' id='login-username' name='username'
+                        value={formData.username} onChange={handleChange} required />
                 </div>
 
                 <div>
                     <label htmlFor="login-password">Password:</label>
-                    <input type='password' id='login-password' name='password' onChange={handleChange} required />
+                    <input type='password' id='login-password' name='password' value={formData.password} onChange={handleChange} required />
                 </div>
 
                 <button type='submit'>Login</button>
             </form>
             <p>
-                Don't have an account? 
+                Don't have an account?
                 <button type="button" onClick={onSwitchToSignup}>
                     Sign Up
                 </button>

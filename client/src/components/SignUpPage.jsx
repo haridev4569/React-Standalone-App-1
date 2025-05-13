@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-const SignupPage = ({ onSwitchToLogin }) => {
+const SignUpPage = ({ onSwitchToLogin }) => {
     const [formData, setFormData] = useState({
         fullname: '',
         email: '',
@@ -9,23 +9,36 @@ const SignupPage = ({ onSwitchToLogin }) => {
         password: '',
         confirmPassword: '',
         gender: '',
-    })
-    const { signup } = useAuth();
+    });
+    const { signup } = useAuth(); 
 
-    const handleSubmit = (e) => {
+    
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const { fullname, email, username, password, confirmPassword, gender } = formData;
-        if (!username || !password || !confirmPassword) {
-            alert('Please fill in all fields.');
+
+        if (!fullname || !email || !username || !password || !confirmPassword || !gender) {
+            alert('Please fill in all required fields.');
             return;
         }
+
         if (password !== confirmPassword) {
             alert('Passwords do not match!');
             return;
         }
-        const success = signup(username, password);
+
+        const success = await signup(fullname, username, password, gender, email); 
         if (success) {
-            onSwitchToLogin();
+            alert('Signup successful! Please log in.'); 
+            onSwitchToLogin(); 
         }
     };
 
@@ -38,18 +51,20 @@ const SignupPage = ({ onSwitchToLogin }) => {
                     <input
                         type="text"
                         id="signup-fullname"
-                        value={fullname}
-                        onChange={(e) => setFormData.fullname(e.target.value)}
+                        name="fullname" 
+                        value={formData.fullname} 
+                        onChange={handleChange} 
                         required
                     />
                 </div>
                 <div>
                     <label htmlFor="signup-email">Email:</label>
                     <input
-                        type="text"
+                        type="email" 
                         id="signup-email"
-                        value={email}
-                        onChange={(e) => setFormData.email(e.target.value)}
+                        name="email" 
+                        value={formData.email} 
+                        onChange={handleChange} 
                         required
                     />
                 </div>
@@ -58,8 +73,9 @@ const SignupPage = ({ onSwitchToLogin }) => {
                     <input
                         type="text"
                         id="signup-username"
-                        value={username}
-                        onChange={(e) => setFormData.username(e.target.value)}
+                        name="username" 
+                        value={formData.username} 
+                        onChange={handleChange} 
                         required
                     />
                 </div>
@@ -68,8 +84,9 @@ const SignupPage = ({ onSwitchToLogin }) => {
                     <input
                         type="password"
                         id="signup-password"
-                        value={password}
-                        onChange={(e) => setFormData.password(e.target.value)}
+                        name="password" 
+                        value={formData.password} 
+                        onChange={handleChange} 
                         required
                     />
                 </div>
@@ -78,8 +95,9 @@ const SignupPage = ({ onSwitchToLogin }) => {
                     <input
                         type="password"
                         id="signup-confirm-password"
-                        value={confirmPassword}
-                        onChange={(e) => setFormData.confirmPassword(e.target.value)}
+                        name="confirmPassword" 
+                        value={formData.confirmPassword} 
+                        onChange={handleChange} 
                         required
                     />
                 </div>
@@ -87,14 +105,15 @@ const SignupPage = ({ onSwitchToLogin }) => {
                     <label htmlFor="gender">Gender:</label>
                     <select
                         id="gender"
-                        name="gender"
-                        value={formData.gender} 
-                        onChange={handleChange}
+                        name="gender" 
+                        value={formData.gender}
+                        onChange={handleChange} 
                         required
                     >
                         <option value="" disabled>Select your gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
+                        <option value="other">Other</option> 
                     </select>
                 </div>
 
@@ -110,4 +129,4 @@ const SignupPage = ({ onSwitchToLogin }) => {
     );
 };
 
-export default SignupPage;
+export default SignUpPage;
