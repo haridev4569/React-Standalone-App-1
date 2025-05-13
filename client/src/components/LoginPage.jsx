@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-const LoginPage = () => {
+const LoginPage = ({ onSwitchToSignup }) => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -18,6 +20,7 @@ const LoginPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         login(formData.username, formData.password);
+
     }
 
     return (
@@ -36,6 +39,12 @@ const LoginPage = () => {
 
                 <button type='submit'>Login</button>
             </form>
+            <p>
+                Don't have an account? 
+                <button type="button" onClick={onSwitchToSignup}>
+                    Sign Up
+                </button>
+            </p>
         </div>
     )
 };
