@@ -9,7 +9,7 @@ function App() {
     return <div>Loading...</div>
   }
 
-  return isAuthenticated ? <DashboardPage /> : <AuthPage />;
+  return isAuthenticated ? <UsersPage /> : <AuthPage />;
 }
 
 export default App;
