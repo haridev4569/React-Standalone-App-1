@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const SignUpPage = ({ onSwitchToLogin }) => {
     const [formData, setFormData] = useState({
@@ -10,9 +11,9 @@ const SignUpPage = ({ onSwitchToLogin }) => {
         confirmPassword: '',
         gender: '',
     });
-    const { signup } = useAuth(); 
+    const { signup } = useAuth();
 
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
@@ -35,11 +36,7 @@ const SignUpPage = ({ onSwitchToLogin }) => {
             return;
         }
 
-        const success = await signup(fullname, username, password, gender, email); 
-        if (success) {
-            alert('Signup successful! Please log in.'); 
-            onSwitchToLogin(); 
-        }
+        const success = await signup(fullname, username, password, gender, email);
     };
 
     return (
@@ -51,20 +48,20 @@ const SignUpPage = ({ onSwitchToLogin }) => {
                     <input
                         type="text"
                         id="signup-fullname"
-                        name="fullname" 
-                        value={formData.fullname} 
-                        onChange={handleChange} 
+                        name="fullname"
+                        value={formData.fullname}
+                        onChange={handleChange}
                         required
                     />
                 </div>
                 <div>
                     <label htmlFor="signup-email">Email:</label>
                     <input
-                        type="email" 
+                        type="email"
                         id="signup-email"
-                        name="email" 
-                        value={formData.email} 
-                        onChange={handleChange} 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         required
                     />
                 </div>
@@ -73,9 +70,9 @@ const SignUpPage = ({ onSwitchToLogin }) => {
                     <input
                         type="text"
                         id="signup-username"
-                        name="username" 
-                        value={formData.username} 
-                        onChange={handleChange} 
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
                         required
                     />
                 </div>
@@ -84,9 +81,9 @@ const SignUpPage = ({ onSwitchToLogin }) => {
                     <input
                         type="password"
                         id="signup-password"
-                        name="password" 
-                        value={formData.password} 
-                        onChange={handleChange} 
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
                         required
                     />
                 </div>
@@ -95,9 +92,9 @@ const SignUpPage = ({ onSwitchToLogin }) => {
                     <input
                         type="password"
                         id="signup-confirm-password"
-                        name="confirmPassword" 
-                        value={formData.confirmPassword} 
-                        onChange={handleChange} 
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
                         required
                     />
                 </div>
@@ -105,15 +102,15 @@ const SignUpPage = ({ onSwitchToLogin }) => {
                     <label htmlFor="gender">Gender:</label>
                     <select
                         id="gender"
-                        name="gender" 
+                        name="gender"
                         value={formData.gender}
-                        onChange={handleChange} 
+                        onChange={handleChange}
                         required
                     >
                         <option value="" disabled>Select your gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
-                        <option value="other">Other</option> 
+                        <option value="other">Other</option>
                     </select>
                 </div>
 
@@ -121,9 +118,7 @@ const SignUpPage = ({ onSwitchToLogin }) => {
             </form>
             <p>
                 Already have an account?{' '}
-                <button type="button" onClick={onSwitchToLogin}>
-                    Login
-                </button>
+                <Link to='/login'>Login</Link>
             </p>
         </div>
     );
