@@ -6,7 +6,7 @@ const LoginPage = ({ onSwitchToSignup }) => {
         username: '',
         password: '',
     });
-    const { login } = useAuth();
+    const { login, setIsLoading } = useAuth();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
