@@ -2,6 +2,7 @@ import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignUpPage";
 import { useAuth } from "./context/AuthContext";
 import { SignUpFormProvider } from "./context/SignUpFormContext";
+import { LoginFormProvider } from "./context/LoginFormContext";
 import UsersPage from "./pages/UsersPage";
 import { Routes, Route, Navigate } from 'react-router-dom';
 
@@ -25,13 +26,21 @@ function App() {
         </Routes>
       ) : (
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={
+            <LoginFormProvider>
+              <LoginPage />
+            </LoginFormProvider>
+          } />
           <Route path="/signup" element={
             <SignUpFormProvider>
               <SignUpPage />
             </SignUpFormProvider>
           } />
-          <Route path="*" element={<LoginPage />} />
+          <Route path="*" element={
+            <LoginFormProvider>
+              <LoginPage />
+            </LoginFormProvider>
+          } />
           <Route path="/" element={<Navigate replace to="/login" />} />
         </Routes>
       )}

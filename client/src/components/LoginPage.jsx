@@ -1,20 +1,14 @@
-import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { useLoginForm } from '../context/LoginFormContext';
 
-const LoginPage = ({ onSwitchToSignup }) => {
-    const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-    });
+const LoginPage = () => {
+    const { formData, updateFormData, clearForm } = useLoginForm();
     const { login, setIsLoading } = useAuth();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevData => ({
-            ...prevData,
-            [name]: value,
-        }));
+        updateFormData(name, value);
     };
 
     const handleSubmit = async (e) => {
@@ -22,6 +16,7 @@ const LoginPage = ({ onSwitchToSignup }) => {
         setIsLoading(true);
         await login(formData.username, formData.password);
         setIsLoading(false);
+        clearForm();
     }
 
     return (
