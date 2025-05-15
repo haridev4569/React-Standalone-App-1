@@ -1,25 +1,16 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { useSignUpForm } from '../context/SignUpFormContext';
 
-const SignUpPage = ({ onSwitchToLogin }) => {
-    const [formData, setFormData] = useState({
-        fullname: '',
-        email: '',
-        username: '',
-        password: '',
-        confirmPassword: '',
-        gender: '',
-    });
+const SignUpPage = () => {
+    const { formData, updateFormData, clearForm } = useSignUpForm();
     const { signup } = useAuth();
 
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevData => ({
-            ...prevData,
-            [name]: value,
-        }));
+        updateFormData(name, value);
     };
 
     const handleSubmit = async (e) => {
@@ -37,6 +28,7 @@ const SignUpPage = ({ onSwitchToLogin }) => {
         }
 
         const success = await signup(fullname, username, password, gender, email);
+        if(success) clearForm();
     };
 
     return (

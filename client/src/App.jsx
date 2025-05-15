@@ -1,6 +1,7 @@
 import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignUpPage";
 import { useAuth } from "./context/AuthContext";
+import { SignUpFormProvider } from "./context/SignUpFormContext";
 import UsersPage from "./pages/UsersPage";
 import { Routes, Route, Navigate } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ function App() {
   }
 
   return (
+
     <div>
       {isAuthenticated ? (
         <Routes>
@@ -24,7 +26,11 @@ function App() {
       ) : (
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/signup" element={
+            <SignUpFormProvider>
+              <SignUpPage />
+            </SignUpFormProvider>
+          } />
           <Route path="*" element={<LoginPage />} />
           <Route path="/" element={<Navigate replace to="/login" />} />
         </Routes>
