@@ -49,11 +49,22 @@ const SignUpPage = () => {
 
 
     const onSubmit = async (data) => {
-        let imageURL = "";
+        let imageBase64 = "";
         if(data.image[0]){
-            imageURL = URL.createObjectURL(data.image[0]);
+            const file = data.image[0];
+
+            const convertToBase64 = (file) => {
+                return new Promise((resolve, reject) => {
+                    const fileReader = new FileReader();
+                    fileReader.readAsDataURL(file);
+                    fileReader.onload = () => resolve(fileReader.result);
+                    fileReader.onerror = (error) => reject(error);
+                });
+            };
+
+            imageBase64 = await convertToBase64(file);
         }
-        const success = await signup(data.fullname, data.username, data.password, data.gender, data.email, imageURL);
+        const success = await signup(data.fullname, data.username, data.password, data.gender, data.email, imageBase64);
         console.log("after signup");
         if (success) {
             reset();

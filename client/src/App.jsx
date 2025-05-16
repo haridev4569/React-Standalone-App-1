@@ -2,6 +2,7 @@ import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignUpPage";
 import { useAuth } from "./context/AuthContext";
 import UsersPage from "./pages/UsersPage";
+import MoviesPage from "./pages/MoviesPage";
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
     <div>
       {isAuthenticated ? (
         <Routes>
-          <Route path="/" element={<UsersPage />} />
+          <Route path="/" element={<MoviesPage />} />
+          <Route path="/users" element={<UsersPage />} />
           <Route path="/login" element={<Navigate replace to="/" />} />
           <Route path="/signup" element={<Navigate replace to="/" />} />
           <Route path="*" element={<Navigate replace to="/" />} />
