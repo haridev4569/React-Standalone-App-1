@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext, createContext } from 'react';
+import { useForm } from 'react-hook-form';
 
 const SignUpFormContext = createContext();
 
@@ -7,17 +8,24 @@ export const useSignUpForm = () => {
 }
 
 export const SignUpFormProvider = ({ children }) => {
-  const [formData, setFormData] = useState(() => {
-    const storedData = localStorage.getItem('SignUpFormData');
-    return storedData ? JSON.parse(storedData) : {
-      fullname: '',
-      email: '',
-      username: '',
-      password: '',
-      confirmPassword: '',
-      gender: '',
-    };
+  const [formData, setFormData] = useState({
+    fullname: '',
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+    gender: '',
   });
+
+  useEffect(() => {
+    const storedData = localStorage.getItem('SignUpFormData');
+    if (storedData) {
+      setFormData(JSON.parse(storedData));
+    }
+    else{
+      console.log("No signup form data found in local storage");
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('SignUpFormData', JSON.stringify(formData));

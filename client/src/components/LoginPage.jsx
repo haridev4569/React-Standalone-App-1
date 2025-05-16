@@ -1,17 +1,44 @@
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import { useLoginForm } from '../context/LoginFormContext';
+import { useForm } from 'react-hook-form';
 
 const LoginPage = () => {
-    const { formData, updateFormData, clearForm } = useLoginForm();
     const { login, setIsLoading } = useAuth();
+
+    const loadPersistedData = () => {
+
+        const persistedDataString = localStorage.getItem('LoginForm');
+        if (persistedDataString) {
+            const persistedData = JSON.parse(persistedDataString);
+            return persistedData;
+        }
+        return {
+            username: '',
+            password: '',
+        };
+    };
+
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+
+        },
+        mode: 'onTouched'
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         updateFormData(name, value);
     };
 
-    const handleSubmit = async (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         await login(formData.username, formData.password);
@@ -22,7 +49,7 @@ const LoginPage = () => {
     return (
         <div>
             <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="login-username">Username:</label>
                     <input type='text' id='login-username' name='username'

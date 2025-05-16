@@ -1,61 +1,93 @@
-import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { useSignUpForm } from '../context/SignUpFormContext';
+import { useForm } from 'react-hook-form';
+import { useCallback, useEffect } from 'react';
+
 
 const SignUpPage = () => {
-    const { formData, updateFormData, clearForm } = useSignUpForm();
     const { signup } = useAuth();
 
+    const loadPersistedData = () => {
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        updateFormData(name, value);
+        const persistedDataString = localStorage.getItem('SignUpFormData');
+        if (persistedDataString) {
+            const persistedData = JSON.parse(persistedDataString);
+            return persistedData;
+        }
+
+        return {
+            username: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        };
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const { fullname, email, username, password, confirmPassword, gender } = formData;
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors },
+    } = useForm({
+        defaultValues: loadPersistedData(),
+        mode: 'onTouched'
+    });
 
-        if (!fullname || !email || !username || !password || !confirmPassword || !gender) {
-            alert('Please fill in all required fields.');
-            return;
+    const watchedValues = watch();
+
+    const saveToLocalStorage = useCallback((data) => {
+        localStorage.setItem('SignUpFormData', JSON.stringify(data));
+    }, []);
+
+
+    useEffect(() => {
+        if (Object.keys(watchedValues).length > 0) {
+            saveToLocalStorage(watchedValues);
         }
+    }, [watchedValues, saveToLocalStorage]);
 
-        if (password !== confirmPassword) {
-            alert('Passwords do not match!');
-            return;
+
+    const onSubmit = async (data) => {
+        const success = await signup(data.fullname, data.username, data.password, data.gender, data.email);
+        console.log("after signup");
+        if (success) {
+            reset();
+            localStorage.removeItem('SignUpFormData');
         }
-
-        const success = await signup(fullname, username, password, gender, email);
-        if(success) clearForm();
     };
 
     return (
         <div>
             <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="signup-fullname">Fullname:</label>
                     <input
                         type="text"
                         id="signup-fullname"
-                        name="fullname"
-                        value={formData.fullname}
-                        onChange={handleChange}
-                        required
+                        {...register('fullname', {
+                            required: "Fullname is required",
+                            minLength: { value: 2, message: "Fullname must be at least 2 characters" },
+                            maxLength: { value: 30, message: "Fullname must be at most 30 characters" },
+                        })}
                     />
+                    {errors.fullname && <p>{errors.fullname.message}</p>}
                 </div>
                 <div>
                     <label htmlFor="signup-email">Email:</label>
                     <input
                         type="email"
                         id="signup-email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
+                        {...register('email', {
+                            required: "Email is required",
+                            pattern: {
+                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                message: "Invalid email address",
+                            },
+                        })}
                     />
+                    {errors.email && <p>{errors.email.message}</p>}
                 </div>
                 <div>
                     <label htmlFor="signup-username">Username:</label>
@@ -63,10 +95,13 @@ const SignUpPage = () => {
                         type="text"
                         id="signup-username"
                         name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
+                        {...register('username', {
+                            required: "Username is required",
+                            minLength: { value: 5, message: "Username must be at least 5 characters" },
+                            maxLength: { value: 15, message: "Username must be at most 15 characters" },
+                        })}
                     />
+                    {errors.username && <p>{errors.username.message}</p>}
                 </div>
                 <div>
                     <label htmlFor="signup-password">Password:</label>
@@ -74,10 +109,16 @@ const SignUpPage = () => {
                         type="password"
                         id="signup-password"
                         name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
+                        {...register('password', {
+                            required: "Password is required",
+                            minLength: { value: 8, message: "Password must be at least 8 characters" },
+                            pattern: {
+                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                message: "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
+                            }
+                        })}
                     />
+                    {errors.password && <p>{errors.password.message}</p>}
                 </div>
                 <div>
                     <label htmlFor="signup-confirm-password">Confirm Password:</label>
@@ -85,25 +126,26 @@ const SignUpPage = () => {
                         type="password"
                         id="signup-confirm-password"
                         name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        required
+                        {...register('confirmPassword', {
+                            required: "Confirm Password is required",
+                            validate: (value) => value === watch('password') || "Passwords do not match",
+                        })}
                     />
+                    {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
                 </div>
                 <div>
                     <label htmlFor="gender">Gender:</label>
                     <select
                         id="gender"
                         name="gender"
-                        value={formData.gender}
-                        onChange={handleChange}
-                        required
+                        {...register('gender')}
                     >
                         <option value="" disabled>Select your gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="other">Other</option>
                     </select>
+                    {errors.gender && <p>{errors.gender.message}</p>}
                 </div>
 
                 <button type="submit">Sign Up</button>
