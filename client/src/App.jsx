@@ -1,8 +1,6 @@
 import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignUpPage";
 import { useAuth } from "./context/AuthContext";
-import { SignUpFormProvider } from "./context/SignUpFormContext";
-import { LoginFormProvider } from "./context/LoginFormContext";
 import UsersPage from "./pages/UsersPage";
 import { Routes, Route, Navigate } from 'react-router-dom';
 
@@ -27,19 +25,13 @@ function App() {
       ) : (
         <Routes>
           <Route path="/login" element={
-            <LoginFormProvider>
-              <LoginPage />
-            </LoginFormProvider>
+            <LoginPage />
           } />
           <Route path="/signup" element={
-            <SignUpFormProvider>
-              <SignUpPage />
-            </SignUpFormProvider>
+            <SignUpPage />
           } />
           <Route path="*" element={
-            <LoginFormProvider>
-              <LoginPage />
-            </LoginFormProvider>
+            <LoginPage />
           } />
           <Route path="/" element={<Navigate replace to="/login" />} />
         </Routes>
