@@ -49,7 +49,11 @@ const SignUpPage = () => {
 
 
     const onSubmit = async (data) => {
-        const success = await signup(data.fullname, data.username, data.password, data.gender, data.email);
+        let imageURL = "";
+        if(data.image[0]){
+            imageURL = URL.createObjectURL(data.image[0]);
+        }
+        const success = await signup(data.fullname, data.username, data.password, data.gender, data.email, imageURL);
         console.log("after signup");
         if (success) {
             reset();
@@ -146,6 +150,15 @@ const SignUpPage = () => {
                         <option value="other">Other</option>
                     </select>
                     {errors.gender && <p>{errors.gender.message}</p>}
+                </div>
+
+                <div>
+                    <label htmlFor='image'>Image:</label>
+                    <input
+                        type='file'
+                        id='image'
+                        {...register('image')}
+                    />
                 </div>
 
                 <button type="submit">Sign Up</button>

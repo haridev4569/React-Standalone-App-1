@@ -29,6 +29,7 @@ const UsersTable = () => {
               <td>{user.username}</td>
               <td>{user.email}</td>
               <td>{user.gender}</td>
+              <td><img src={user.image} alt={user.fullname} style={{ width: '50px', height: '50px' }} /></td>
             </tr>
           ))}
         </tbody>
