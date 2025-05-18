@@ -19,8 +19,8 @@ const MovieSearch = () => {
   };
 
   return (
-    <div className='bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-      <div className='bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-4xl mx-auto'>
+    <div className='bg-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-5xl mx-auto'>
         <form className='flex flex-wrap sm:flex-nowrap items-end gap-4 sm:gap-6' onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-grow min-w-0">
             <label htmlFor="title" className="sr-only">Search by Title</label>
@@ -28,7 +28,7 @@ const MovieSearch = () => {
               type="text"
               id="title"
               placeholder='Search by Title'
-              className='block w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm'
+              className='block w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 sm:text-sm'
               {...register('title', { required: "Title is required" })}
             />
           </div>
@@ -39,7 +39,7 @@ const MovieSearch = () => {
               type="number"
               id="year"
               placeholder='Year'
-              className='block w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+              className='block w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none'
               {...register('year')}
             />
           </div>
