@@ -5,6 +5,7 @@ import {
   createColumnHelper,
   getCoreRowModel,
   getSortedRowModel,
+  getPaginationRowModel,
   flexRender,
 } from '@tanstack/react-table';
 import { LoadingSpinner } from './LoadingSpinner';
@@ -15,6 +16,10 @@ const MoviesTable = () => {
 
   const { movies, isLoading } = useMovie();
   const [sorting, setSorting] = useState([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 4,
+  })
 
   const data = useMemo(() => movies || [], [movies]);
 
@@ -57,10 +62,13 @@ const MoviesTable = () => {
     columns,
     state: {
       sorting,
+      pagination,
     },
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   if (isLoading) return <LoadingSpinner />;
@@ -128,8 +136,48 @@ const MoviesTable = () => {
             </tbody>
           </table>
         </div>
+        <div className="flex items-center justify-between gap-4 mt-6">
+          <button
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            Previous
+          </button>
+
+          <div className='flex items-center gap-3'>
+            <span>
+              Page{' '}
+              <strong>
+                {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+              </strong>
+            </span>
+
+            <input
+              type="number"
+              min={1}
+              max={table.getPageCount()}
+              defaultValue={table.getState().pagination.pageIndex + 1}
+              onChange={e => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                table.setPageIndex(page);
+              }}
+              className="w-16 px-2 py-1 border rounded text-sm"
+            />
+          </div>
+
+          <button
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            Next
+          </button>
+        </div>
+
       </div>
     </div>
+
 
   );
 }
