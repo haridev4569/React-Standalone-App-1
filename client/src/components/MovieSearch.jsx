@@ -1,8 +1,13 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMovie } from '../context/MovieContext';
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
 
 const MovieSearch = () => {
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -20,6 +25,7 @@ const MovieSearch = () => {
 
   return (
     <div className='bg-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
+      <button onClick={() => navigate('/users')} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Users Page</button>
       <div className='bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-5xl mx-auto'>
         <form className='flex flex-wrap sm:flex-nowrap items-end gap-4 sm:gap-6' onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-grow min-w-0">
@@ -71,6 +77,7 @@ const MovieSearch = () => {
           </div>
         </form>
       </div>
+      <button onClick={logout} className='px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-300'>Logout</button>
     </div>
   );
 }
