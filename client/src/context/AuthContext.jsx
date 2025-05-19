@@ -1,5 +1,6 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import LoadingScreen from '../components/AuthLoading';
 
 const AuthContext = createContext();
 
@@ -91,7 +92,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <LoadingScreen />
   }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
