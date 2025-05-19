@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useMovie } from '../context/MovieContext';
 import {
   useReactTable,
@@ -7,12 +7,14 @@ import {
   getSortedRowModel,
   flexRender,
 } from '@tanstack/react-table';
+import { LoadingSpinner } from './LoadingSpinner';
 
 const columnHelper = createColumnHelper();
 
 const MoviesTable = () => {
 
   const { movies, isLoading } = useMovie();
+  const [sorting, setSorting] = useState([]);
 
   const data = useMemo(() => movies || [], [movies]);
 
@@ -27,21 +29,24 @@ const MoviesTable = () => {
           ) : (
             <span>Poster not available</span>
           )
-        }
+        },
+        enableSorting: false,
       }),
 
       columnHelper.accessor('Title', {
         header: 'Title',
         cell: info => info.getValue(),
-        enableSorting: false,
+        enableSorting: true,
       }),
       columnHelper.accessor('Year', {
         header: 'Year',
         cell: info => info.getValue(),
+        enableSorting: true,
       }),
       columnHelper.accessor('Type', {
         header: 'Type',
         cell: info => info.getValue(),
+        enableSorting: true,
       }),
     ]
     , []
@@ -50,11 +55,15 @@ const MoviesTable = () => {
   const table = useReactTable({
     data,
     columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinner />;
   if (!movies || movies.length === 0) return (
     <div className="mt-8 sm:mt-12 w-full max-w-md mx-auto px-4 sm:px-0 text-center">
       <div className="bg-white p-8 sm:p-10 rounded-xl shadow-lg">
@@ -74,14 +83,15 @@ const MoviesTable = () => {
         </h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-300 border border-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-200">
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => (
                     <th
                       key={header.id}
                       scope="col"
-                      className="px-4 py-3 sm:px-6 sm:py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-4 py-3 sm:px-6 sm:py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none"
+                      onClick={header.column.getToggleSortingHandler()}
                     >
                       {header.isPlaceholder
                         ? null
@@ -89,6 +99,11 @@ const MoviesTable = () => {
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                      {' '}
+                      {{
+                        asc: '⬆️',
+                        desc: '⬇️',
+                      }[header.column.getIsSorted()] ?? null}
                     </th>
                   ))}
                 </tr>

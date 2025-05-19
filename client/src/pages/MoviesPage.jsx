@@ -5,7 +5,7 @@ import { MovieProvider } from "../context/MovieContext";
 const MoviesPage = () => {
   return (
     <MovieProvider>
-      <div className="bg-blue-50">
+      <div className="bg-blue-50 min-h-screen h-full">
         <MovieSearch />
         <MoviesTable />
       </div>
