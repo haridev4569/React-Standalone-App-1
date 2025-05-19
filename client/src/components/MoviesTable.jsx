@@ -32,7 +32,11 @@ const MoviesTable = () => {
           return posterUrl ? (
             <img src={posterUrl} style={{ width: '50px', height: '50px' }} />
           ) : (
-            <span>Poster not available</span>
+            <img
+              src="/notavailablepic.jpg"
+              alt="Not Available"
+              style={{ width: '50px', height: '50px' }}
+            />
           )
         },
         enableSorting: false,

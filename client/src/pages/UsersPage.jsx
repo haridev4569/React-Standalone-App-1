@@ -8,7 +8,7 @@ const UsersPage = () => {
   const { currentUser, logout } = useAuth();
   return (
     <div className='w-full min-h-screen h-full bg-blue-50 flex '>
-      <div className="max-w-4xl mx-auto my-8 p-6 bg-white rounded-lg shadow-lg">
+      <div className="w-full min-h-screen h-full max-w-5xl mx-auto my-8 p-6 bg-white rounded-lg shadow-lg">
         <div className="flex items-center justify-between mb-6">
           {/* <h1 className="text-2xl font-bold text-gray-800">Users</h1> */}
           <button onClick={() => navigate('/')} className='bg-gray-100 hover:bg-gray-200 text-gray-600 border border-gray-300 rounded outline-none text-md font-medium py-2 px-4 rounded'>Movies Page</button>
