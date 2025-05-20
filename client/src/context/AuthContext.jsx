@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [isAuthenticated, currentUser, users, isLoading]);
 
-  const signup = (fullname, username, password, gender, email, image) => {
+  const signup = (fullname, username, password, gender, email, image, signature) => {
 
     if (users.find(user => user.username === username)) {
       alert('Username already exists. Please choose another username.');
@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
       password,
       gender,
       image,
+      signature,
     };
     setUsers(prevUsers => [...prevUsers, newUser]);
     setCurrentUser(newUser);

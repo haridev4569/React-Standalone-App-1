@@ -2,7 +2,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useCallback, useEffect } from 'react';
-
+import SignatureField from './SignatureField';
 
 const SignUpPage = () => {
     const { signup } = useAuth();
@@ -16,10 +16,14 @@ const SignUpPage = () => {
         }
 
         return {
-            username: '',
+            fullname: '',
             email: '',
+            username: '',
             password: '',
             confirmPassword: '',
+            gender: '',
+            image: null,
+            signature: '',
         };
     };
 
@@ -27,6 +31,7 @@ const SignUpPage = () => {
         register,
         handleSubmit,
         watch,
+        setValue,
         reset,
         formState: { errors },
     } = useForm({
@@ -47,6 +52,10 @@ const SignUpPage = () => {
         }
     }, [watchedValues, saveToLocalStorage]);
 
+    const handleSignatureSave = useCallback((signatureDataUrl) => {
+        setValue('signature', signatureDataUrl);
+    }, [setValue]);
+
 
     const onSubmit = async (data) => {
         let imageBase64 = "";
@@ -64,7 +73,7 @@ const SignUpPage = () => {
 
             imageBase64 = await convertToBase64(file);
         }
-        const success = await signup(data.fullname, data.username, data.password, data.gender, data.email, imageBase64);
+        const success = await signup(data.fullname, data.username, data.password, data.gender, data.email, imageBase64, data.signature);
         console.log("after signup");
         if (success) {
             reset();
@@ -196,6 +205,13 @@ const SignUpPage = () => {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-gray-50 cursor-pointer hover:bg-gray-100"
                         />
 
+                    </div>
+
+                    <div>
+                        <label className="block mb-1 font-semibold text-gray-700">
+                            Signature:
+                        </label>
+                        <SignatureField onSave={handleSignatureSave} />
                     </div>
 
                     <button

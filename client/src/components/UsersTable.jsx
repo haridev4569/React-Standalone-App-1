@@ -43,6 +43,10 @@ const UsersTable = () => {
       header: 'Image',
       cell: info => <img src={info.getValue()} style={{ width: '50px', height: '50px' }} />,
     }),
+    columnHelper.accessor('signature', {
+      header: 'Signature',
+      cell: info => <img src={info.getValue()} style={{ width: '50px', height: '50px' }} />,
+    }),
   ], []);
 
   const table = useReactTable({
