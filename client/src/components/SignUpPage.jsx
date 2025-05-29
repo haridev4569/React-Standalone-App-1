@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useCallback, useEffect } from 'react';
 import SignatureField from './SignatureField';
+import AddressField from './AddressField';
 
 const SignUpPage = () => {
     const { signup } = useAuth();
@@ -216,6 +217,7 @@ const SignUpPage = () => {
                     
                     <div>
                         {/* address field */}
+                        <AddressField />
                     </div>
 
                     <button
