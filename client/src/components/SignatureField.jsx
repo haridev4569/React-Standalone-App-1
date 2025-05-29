@@ -4,6 +4,7 @@ import SignatureCanvas from 'react-signature-canvas';
 const SignatureField = ({ onSave }) => {
 
     const [signature, setSignature] = useState(null);
+    const [isUploaded, setIsUploaded] = useState(false);
     const canvasRef = useRef(null);
     const fileInputRef = useRef(null);
 
@@ -35,29 +36,31 @@ const SignatureField = ({ onSave }) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
+            reader.readAsDataURL(file);
             reader.onload = (e) => {
-                canvasRef.current.clear();
-                canvasRef.current.fromDataURL(e.target.result);
-                const signatureDataUrl = canvasRef.current.toDataURL('image/png');
+                const signatureDataUrl = reader.result;
+                setIsUploaded(true);
                 setSignature(signatureDataUrl);
                 if (onSave) {
                     onSave(signatureDataUrl);
                 }
             };
-            reader.readAsDataURL(file);
         }
     };
 
     return (
         <div className='w-full'>
-            <p className='text-md text-gray-600'>Sign Here</p>
-            <div>
-                <SignatureCanvas
-                    ref={canvasRef}
-                    penColor='black'
+            {!isUploaded && (
+                <div>
+                    <p className='text-md text-gray-600'>Sign Here</p>
+                    <div>
+                        <SignatureCanvas
+                            ref={canvasRef}
+                            penColor='black'
 
-                />
-            </div>
+                        />
+                    </div>
+                </div>)}
             <div className='flex gap-4'>
 
 

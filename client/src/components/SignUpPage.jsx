@@ -83,7 +83,7 @@ const SignUpPage = () => {
 
     return (
         <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500'>
-            <div className='bg-white p-8 min-w-lg rounded-lg shadow-lg w-full max-w-sm mx-auto'>
+            <div className='bg-white my-4 p-8 min-w-lg rounded-lg shadow-lg w-full max-w-sm mx-auto'>
                 <h2 className='text-4xl font-semibold mb-4 w-full text-center'>Sign Up</h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mx-auto w-full max-w-sm bg-white p-6 rounded-lg shadow-md">
                     <div>
@@ -212,6 +212,10 @@ const SignUpPage = () => {
                             Signature:
                         </label>
                         <SignatureField onSave={handleSignatureSave} />
+                    </div>
+                    
+                    <div>
+                        {/* address field */}
                     </div>
 
                     <button
