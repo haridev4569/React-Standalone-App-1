@@ -21,8 +21,8 @@ const SignatureField = ({ onSave }) => {
     };
 
     const handleClear = () => {
-        canvasRef.current.clear();
         setSignature(null);
+        setIsUploaded(false);
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }
@@ -57,7 +57,16 @@ const SignatureField = ({ onSave }) => {
                         <SignatureCanvas
                             ref={canvasRef}
                             penColor='black'
-
+                            canvasProps={{
+                                width: 300,
+                                height: 200,
+                                style: {
+                                    border: '1px solid black',
+                                    marginBottom: '1rem',
+                                    padding: '1rem',
+                                    borderRadius: '5px'
+                                }
+                            }}
                         />
                     </div>
                 </div>)}
