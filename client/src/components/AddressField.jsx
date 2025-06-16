@@ -191,7 +191,10 @@ const AddressField = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 onBlur={handleBlurOrEnter}
                 onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleBlurOrEnter();
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleBlurOrEnter();
+                    }
                 }}
                 placeholder="Search for a place or enter lat,lng"
                 style={{ width: '90%', border: '1px solid black', borderRadius: '5px', padding: '5px', marginBottom: '10px', marginTop: '10px' }}
